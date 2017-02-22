@@ -1,0 +1,17 @@
+- outputs:
+  - out1.dat
+  inputs:
+  - in1.data
+  param: 10
+
+- outputs:
+  - out2.dat
+  inputs:
+  - in2.data
+
+- outputs:
+  - out3.dat
+- outputs:
+  - out4.dat
+- outputs:
+  - out5.dat
