@@ -25,9 +25,11 @@ func main() {
     app.Version = "0.1.0"
     app.Usage = "Command line parallel task manager"
     app.Action = func(context *cli.Context) error {
-        data := read.Yaml(context.Args().First())
-        cmd := context.Args().Get(1)
-        primary_arg := strings.Join(cli.Args(context.Args().Tail()).Tail(), " ")
+        argc := context.NArg()
+        file_tasks := context.Args().Get(argc-1)
+        data := read.Yaml(file_tasks)
+        cmd := context.Args().First()
+        primary_arg := strings.Join(context.Args()[1:argc-1], " ")
         var wg sync.WaitGroup
         for _, v := range data {
             wg.Add(1)
