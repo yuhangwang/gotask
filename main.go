@@ -24,16 +24,10 @@ func main() {
     app.Name = "GoTask"
     app.Version = "0.1.0"
     app.Usage = "Command line parallel task manager"
-    app.Flags = []cli.Flag{
-        cli.StringFlag{
-            Name: "config, c",
-            Usage: "Use YAML file content as arguments",
-        },
-    }
     app.Action = func(context *cli.Context) error {
-        data := read.Yaml(context.String("config"))
-        cmd := context.Args().First()
-        primary_arg := strings.Join(context.Args().Tail(), " ")
+        data := read.Yaml(context.Args().First())
+        cmd := context.Args().Get(1)
+        primary_arg := strings.Join(cli.Args(context.Args().Tail()).Tail(), " ")
         var wg sync.WaitGroup
         for _, v := range data {
             wg.Add(1)
