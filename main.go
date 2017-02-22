@@ -8,6 +8,7 @@ import (
     "github.com/yuhangwang/gotask/encode"
     "github.com/yuhangwang/gotask/wrap"
     "github.com/yuhangwang/gotask/task"
+    "github.com/yuhangwang/gotask/convert"
 )
 
 
@@ -23,12 +24,12 @@ func main() {
         cmd := context.Args().First()
         primary_arg := context.Args()[1:argc-1]
         var wg sync.WaitGroup
-        for _, v := range data {
+        for _, v := range data.([]interface{}) {
             wg.Add(1)
             go func(arg string) {
                 defer wg.Done()
                 task.Run(cmd, append(primary_arg, arg)...)
-            }(wrap.Brackets("[",encode.Json(v),"]"))
+            }(wrap.Brackets("[",encode.Json(convert.MapLike(v)),"]"))
         }
         wg.Wait()
         return nil

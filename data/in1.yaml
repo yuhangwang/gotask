@@ -15,3 +15,6 @@
   - out4.dat
 - outputs:
   - out5.dat
+
+- outputs:
+    src: out6.dat

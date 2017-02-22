@@ -8,10 +8,10 @@ import (
 
 
 
-func Yaml(file_name string) []map[string]interface{} {
+func Yaml(file_name string) interface{} {
     text_bytes, err_msg := ioutil.ReadFile(file_name)
     err.Check(err_msg)
-    data := make([]map[string]interface{},1)
+    var data interface{}
     err.Check(yaml.Unmarshal(text_bytes, &data))
     return data
 }
