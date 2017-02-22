@@ -2,21 +2,13 @@ package main
 
 import (
     "os"
-    "os/exec"
-    "fmt"
     "sync"
     "github.com/urfave/cli"
     "github.com/yuhangwang/gotask/read"
     "github.com/yuhangwang/gotask/encode"
-    "github.com/yuhangwang/gotask/err"
     "github.com/yuhangwang/gotask/wrap"
+    "github.com/yuhangwang/gotask/task"
 )
-
-func run(cmd string, args ...string) {
-    stdOutErr, err_msg := exec.Command(cmd,  args...).CombinedOutput()
-    fmt.Printf("%s\n", stdOutErr)
-    err.Check(err_msg)
-}
 
 
 func main() {
@@ -35,7 +27,7 @@ func main() {
             wg.Add(1)
             go func(arg string) {
                 defer wg.Done()
-                run(cmd, append(primary_arg, arg)...)
+                task.Run(cmd, append(primary_arg, arg)...)
             }(wrap.Brackets("[",encode.Json(v),"]"))
         }
         wg.Wait()
