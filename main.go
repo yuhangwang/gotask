@@ -5,15 +5,15 @@ import (
     "os/exec"
     "fmt"
     "sync"
-    "strings"
     "github.com/urfave/cli"
     "github.com/yuhangwang/gotask/read"
     "github.com/yuhangwang/gotask/encode"
     "github.com/yuhangwang/gotask/err"
+    "github.com/yuhangwang/gotask/wrap"
 )
 
 func run(cmd string, args ...string) {
-    stdOutErr, err_msg := exec.Command(cmd, args...).CombinedOutput()
+    stdOutErr, err_msg := exec.Command(cmd,  args...).CombinedOutput()
     fmt.Printf("%s\n", stdOutErr)
     err.Check(err_msg)
 }
@@ -29,14 +29,14 @@ func main() {
         file_tasks := context.Args().Get(argc-1)
         data := read.Yaml(file_tasks)
         cmd := context.Args().First()
-        primary_arg := strings.Join(context.Args()[1:argc-1], " ")
+        primary_arg := context.Args()[1:argc-1]
         var wg sync.WaitGroup
         for _, v := range data {
             wg.Add(1)
             go func(arg string) {
                 defer wg.Done()
-                run(cmd, primary_arg, arg)
-            }(string(encode.Json(v)))
+                run(cmd, append(primary_arg, arg)...)
+            }(wrap.Brackets("[",encode.Json(v),"]"))
         }
         wg.Wait()
         return nil
