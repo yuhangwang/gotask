@@ -13,7 +13,6 @@ import (
     "github.com/yuhangwang/gotask/convert"
 )
 
-
 func main() {
     app := cli.NewApp()
     app.Name = "GoTask"
@@ -33,14 +32,18 @@ func main() {
             task.Run(cmd, context.Args()[1:]...)
             os.Exit(1)
         }
+
         data := read.Yaml(file_tasks)
         primary_arg := context.Args()[1:argc-1]
+        
         var wg sync.WaitGroup
         for _, v := range data.([]interface{}) {
             wg.Add(1)
             go func(arg string) {
                 defer wg.Done()
-                task.Run(cmd, append(primary_arg, arg)...)
+                tmp := make([]string, len(primary_arg))
+                copy(tmp, primary_arg)
+                task.Run(cmd, append(tmp, arg)...)
             }(wrap.Brackets("[",encode.Json(convert.MapLike(v)),"]"))
         }
         wg.Wait()
