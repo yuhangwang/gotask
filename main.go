@@ -39,10 +39,8 @@ func main() {
         var wg sync.WaitGroup
         for _, v := range data.([]interface{}) {
             fmt.Println(v)
-            arg := wrap.Brackets("[",encode.Json(convert.MapLike(v)),"]")
-            tmp := make([]string, len(primary_arg))
-            copy(tmp, primary_arg)
-            all_args := append(tmp, arg)
+            json_arg := wrap.Brackets("[",encode.Json(convert.MapLike(v)),"]")
+            all_args := task.AppendArg(primary_arg, json_arg)
             wg.Add(1)
             go func(cmd string, all_args []string) {
                 defer wg.Done()
