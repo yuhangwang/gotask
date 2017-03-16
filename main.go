@@ -41,6 +41,11 @@ func main() {
         // in any port of the go routine function body.
         // Use function arguments and make sure all go routines
         // are independent.
+        // note: variables declared inside the loop
+        //    are not shared between loops
+        // I will rewrite this part using recursion instead of loop
+        // Mutations in loops are VERY BAD!!!
+        // Why can't Go be more functional?! -- Steven W.  03/15/17
         for _, v := range data.([]interface{}) {
             fmt.Println(v)
             json_arg := wrap.Brackets("[",encode.Json(convert.MapLike(v)),"]")
