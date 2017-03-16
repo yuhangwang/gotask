@@ -37,6 +37,10 @@ func main() {
         primary_arg := context.Args()[1:argc-1]
         
         var wg sync.WaitGroup
+        // note: in go routine, don't include any mutable object
+        // in any port of the go routine function body.
+        // Use function arguments and make sure all go routines
+        // are independent.
         for _, v := range data.([]interface{}) {
             fmt.Println(v)
             json_arg := wrap.Brackets("[",encode.Json(convert.MapLike(v)),"]")
