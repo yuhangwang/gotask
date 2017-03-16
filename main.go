@@ -47,7 +47,7 @@ func main() {
         // Mutations in loops are VERY BAD!!!
         // Why can't Go be more functional?! -- Steven W.  03/15/17
         for _, v := range data.([]interface{}) {
-            fmt.Println(v)
+            task.PrettyPrint(v)
             json_arg := wrap.Brackets("[",encode.Json(convert.MapLike(v)),"]")
             all_args := task.AppendArg(primary_arg, json_arg)
             wg.Add(1)
