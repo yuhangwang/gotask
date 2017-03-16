@@ -44,10 +44,10 @@ func main() {
             copy(tmp, primary_arg)
             all_args := append(tmp, arg)
             wg.Add(1)
-            go func() {
+            go func(cmd string, all_args []string) {
                 defer wg.Done()
                 task.Run(cmd, all_args...)
-            }()
+            }(cmd, all_args)
         }
         wg.Wait()
         return nil
