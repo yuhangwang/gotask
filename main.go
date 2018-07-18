@@ -57,7 +57,6 @@ func main() {
             go func(cmd string, all_args []string) {
                 defer wg.Done()
                 task.Run(cmd, all_args...)
-                fmt.Println(all_args[1])
             }(cmd, all_args)
 
             if ccc == runtime.NumCPU() {
