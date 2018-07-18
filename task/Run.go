@@ -1,14 +1,15 @@
 package task
 
 import (
-    "fmt"
+    // "fmt"
     "os/exec"
     "github.com/yuhangwang/gotask/err"
 )
 
 
 func Run(cmd string, args ...string) {
-    stdOutErr, err_msg := exec.Command(cmd,  args...).CombinedOutput()
-    fmt.Printf("%s\n", stdOutErr)
+    // stdOutErr, err_msg := exec.Command(cmd,  args...).CombinedOutput()
+    // fmt.Printf("%s\n", stdOutErr)
+    err_msg := exec.Command(cmd, args...).Run()
     err.Check(err_msg)
 }

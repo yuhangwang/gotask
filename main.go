@@ -1,6 +1,7 @@
 package main
 
 import (
+    "runtime"
     "os"
     "sync"
     "regexp"
@@ -46,17 +47,27 @@ func main() {
         // I will rewrite this part using recursion instead of loop
         // Mutations in loops are VERY BAD!!!
         // Why can't Go be more functional?! -- Steven W.  03/15/17
+        ccc := 0
         for _, v := range data.([]interface{}) {
             task.PrettyPrint(v)
             json_arg := wrap.Brackets("[",encode.Json(convert.MapLike(v)),"]")
             all_args := task.AppendArg(primary_arg, json_arg)
             wg.Add(1)
+            ccc = ccc + 1
             go func(cmd string, all_args []string) {
                 defer wg.Done()
                 task.Run(cmd, all_args...)
+                fmt.Println(all_args[1])
             }(cmd, all_args)
+
+            if ccc == runtime.NumCPU() {
+                wg.Wait()
+                ccc = 0
+            }
         }
-        wg.Wait()
+        wg.Wait(); // wait for the residual go routines to finish
+
+        fmt.Printf("=============== Number of CPUs: %d\n", runtime.NumCPU())
         return nil
     }
 
