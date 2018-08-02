@@ -1,6 +1,7 @@
 package main
 
 import (
+    "strconv"
     "runtime"
     "os"
     "sync"
@@ -19,6 +20,15 @@ func main() {
     app.Name = "GoTask"
     app.Version = "0.1.0"
     app.Usage = "Command line parallel task manager"
+    app.Flags = []cli.Flag {
+        cli.StringFlag{
+            Name: "parallel",
+            Value: "default",
+            Usage: "number of parallel tasks to be executed at the same time",
+            EnvVar: "GTPAR",
+        },
+    }
+
     app.Action = func(context *cli.Context) error {
         if len(context.Args()) == 0 {
             fmt.Println("Error hint: please provide arguments to gotask")
@@ -37,6 +47,11 @@ func main() {
         data := read.Yaml(file_tasks)
         primary_arg := context.Args()[1:argc-1]
         
+        fmt.Println("num of parallel", context.String("parallel"))
+        max_parallel := runtime.NumCPU()
+        if context.String("parallel") != "default" {
+            max_parallel, _ = strconv.Atoi(context.String("parallel"))
+        }
         var wg sync.WaitGroup
         // note: in go routine, don't include any mutable object
         // in any port of the go routine function body.
@@ -59,14 +74,14 @@ func main() {
                 task.Run(cmd, all_args...)
             }(cmd, all_args)
 
-            if ccc == runtime.NumCPU() {
+            if ccc == max_parallel {
                 wg.Wait()
                 ccc = 0
             }
         }
         wg.Wait(); // wait for the residual go routines to finish
 
-        fmt.Printf("=============== Number of CPUs: %d\n", runtime.NumCPU())
+        fmt.Printf("=============== max parallel threads: %d\n", max_parallel)
         return nil
     }
 
