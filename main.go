@@ -13,7 +13,6 @@ import (
 	"github.com/yuhangwang/gotask/encode"
 	"github.com/yuhangwang/gotask/read"
 	"github.com/yuhangwang/gotask/task"
-	"github.com/yuhangwang/gotask/wrap"
 )
 
 func main() {
@@ -66,14 +65,14 @@ func main() {
 		ccc := 0
 		for _, v := range data.([]interface{}) {
 			task.PrettyPrint(v)
-			json_arg := wrap.Brackets("[", encode.Json(convert.MapLike(v)), "]")
-			all_args := task.AppendArg(primary_arg, json_arg)
+			jsonArgs := fmt.Sprintf("%s", encode.Json(convert.MapLike(v)))
+			allArgs := task.AppendArg(primary_arg, jsonArgs)
 			wg.Add(1)
 			ccc = ccc + 1
-			go func(cmd string, all_args []string) {
+			go func(cmd string, allArgs []string) {
 				defer wg.Done()
-				task.Run(cmd, all_args...)
-			}(cmd, all_args)
+				task.Run(cmd, allArgs...)
+			}(cmd, allArgs)
 
 			if ccc == max_parallel {
 				wg.Wait()
