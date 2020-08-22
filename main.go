@@ -35,7 +35,7 @@ func main() {
 			fmt.Println("Error hint: please provide arguments to gotask")
 			os.Exit(1)
 		}
-		validYamlFileName := regexp.MustCompile(".*[.]yaml$")
+		validYamlFileName := regexp.MustCompile(".*[.]ya?ml$")
 		cmd := context.Args().First()
 		argc := context.NArg()
 		file_tasks := context.Args().Get(argc - 1)

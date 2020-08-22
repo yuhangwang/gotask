@@ -11,6 +11,10 @@ tasks:
       - task: test1
     silent: true
 
-  test1:
+  test1a:
     cmds:
       - gotask python3 work.py in.yaml
+
+  test1b:
+    cmds:
+      - gotask python3 work.py in.yml
