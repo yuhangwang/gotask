@@ -8,7 +8,7 @@ vars:
 tasks:
   default:
     cmds:
-      - task: test1
+      - task: test1a
     silent: true
 
   test1a:

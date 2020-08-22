@@ -2,13 +2,13 @@ import json
 import sys
 import time
 
-def main(argd):
-    print("from python: ", argd[0])
-    time.sleep(argd[0])
+def main(t):
+    print("from python: ", t)
+    time.sleep(t)
 
 
 if __name__ == '__main__':
-    arg = "".join(sys.argv[1:])
+    t = sys.argv[1]
     start = time.time()
-    main(json.loads(arg))
+    main(json.loads(t))
     end = time.time()
